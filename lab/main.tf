@@ -4,7 +4,6 @@ resource "azurerm_resource_group" "rg" {
   name     = "${random_pet.prefix.id}-rg"
 }
 
-
 # Virtual Network 1
 resource "azurerm_virtual_network" "my_terraform_network_1" {
   name                = "${random_pet.prefix.id}-vnet-1"
@@ -12,7 +11,6 @@ resource "azurerm_virtual_network" "my_terraform_network_1" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
-
 
 # Virtual Network 2
 resource "azurerm_virtual_network" "my_terraform_network_2" {
@@ -22,13 +20,11 @@ resource "azurerm_virtual_network" "my_terraform_network_2" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-
 # Network Interface 1
 resource "azurerm_network_interface" "nic1" {
   name                = "nic1"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.my_terraform_subnet_1.id
@@ -36,13 +32,11 @@ resource "azurerm_network_interface" "nic1" {
   }
 }
 
-
 # Network Interface 2
 resource "azurerm_network_interface" "nic2" {
   name                = "nic2"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.my_terraform_subnet_2.id
@@ -50,15 +44,12 @@ resource "azurerm_network_interface" "nic2" {
   }
 }
 
-
-
 resource "azurerm_virtual_machine" "vm1" {
   name                  = "vm1"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.nic1.id]
   vm_size               = "Standard_B1s"
-
   storage_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
@@ -87,7 +78,6 @@ resource "azurerm_virtual_machine" "vm2" {
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.nic2.id]
   vm_size               = "Standard_B1s"
-
   storage_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
@@ -110,7 +100,6 @@ resource "azurerm_virtual_machine" "vm2" {
   }
 }
 
-
 # Virtual Network Peering from VNet2 to VNet1
 resource "azurerm_virtual_network_peering" "vnet2-to-vnet1" {
   name                         = "vnet2-to-vnet1"
@@ -122,7 +111,6 @@ resource "azurerm_virtual_network_peering" "vnet2-to-vnet1" {
   allow_gateway_transit        = false
   use_remote_gateways          = false
 }
-
 
 # Virtual Network Peering from VNet1 to VNet2
 resource "azurerm_virtual_network_peering" "vnet1-to-vnet2" {
@@ -136,7 +124,6 @@ resource "azurerm_virtual_network_peering" "vnet1-to-vnet2" {
   use_remote_gateways          = false
 }
 
-
 # Public IP 
 resource "azurerm_public_ip" "example" {
   name                = "examplepip"
@@ -145,7 +132,6 @@ resource "azurerm_public_ip" "example" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
-
 
 # Bastion Host
 resource "azurerm_bastion_host" "example" {
@@ -158,7 +144,6 @@ resource "azurerm_bastion_host" "example" {
     public_ip_address_id = azurerm_public_ip.example.id
   }
 }
-
 
 # Bastion Subnet
 resource "azurerm_subnet" "example" {
@@ -177,7 +162,6 @@ resource "azurerm_subnet" "my_terraform_subnet_1" {
   address_prefixes     = ["10.0.0.0/24"]
 }
 
-
 # Subnet 2
 resource "azurerm_subnet" "my_terraform_subnet_2" {
   name                 = "subnet-2"
@@ -185,7 +169,6 @@ resource "azurerm_subnet" "my_terraform_subnet_2" {
   virtual_network_name = azurerm_virtual_network.my_terraform_network_2.name
   address_prefixes     = ["10.1.0.0/24"]
 }
-
 
 resource "random_pet" "prefix" {
   prefix = var.resource_group_name_prefix
@@ -199,7 +182,6 @@ resource "azurerm_network_security_group" "nsg_vnet1" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
-
 
 # Inbound rule to allow traffic from VNet2 to VNet1
 resource "azurerm_network_security_rule" "allow_vnet2_to_vnet1" {
@@ -216,14 +198,12 @@ resource "azurerm_network_security_rule" "allow_vnet2_to_vnet1" {
   resource_group_name         = azurerm_resource_group.rg.name
 }
 
-
 # Network Security Group for VNet2
 resource "azurerm_network_security_group" "nsg_vnet2" {
   name                = "nsg-vnet2"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
-
 
 # Inbound rule to allow traffic from VNet1 to VNet2
 resource "azurerm_network_security_rule" "allow_vnet1_to_vnet2" {
@@ -240,13 +220,11 @@ resource "azurerm_network_security_rule" "allow_vnet1_to_vnet2" {
   resource_group_name         = azurerm_resource_group.rg.name
 }
 
-
 # Associate NSG with Subnet1 in VNet1
 resource "azurerm_subnet_network_security_group_association" "subnet1_nsg" {
   subnet_id                 = azurerm_subnet.my_terraform_subnet_1.id
   network_security_group_id = azurerm_network_security_group.nsg_vnet1.id
 }
-
 
 # Associate NSG with Subnet2 in VNet2
 resource "azurerm_subnet_network_security_group_association" "subnet2_nsg" {
