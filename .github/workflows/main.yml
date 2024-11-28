@@ -61,7 +61,6 @@ jobs:
 
     # Apply Terraform changes - manual trigger for safety
     - name: Terraform Apply
-      if: github.event_name == 'workflow_dispatch'
       uses: hashicorp/terraform-github-actions@master
       with:
         tf_actions_version: ${{ env.TF_VERSION }}
