@@ -234,7 +234,7 @@ resource "azurerm_network_security_rule" "allow_vnet1_to_vnet2" {
   protocol                    = "*"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix = tolist(azurerm_virtual_network.my_terraform_network_1.address_space)[0]
+  source_address_prefix       = tolist(azurerm_virtual_network.my_terraform_network_1.address_space)[0]
   destination_address_prefix  = "*"
   network_security_group_name = azurerm_network_security_group.nsg_vnet2.name
   resource_group_name         = azurerm_resource_group.rg.name
