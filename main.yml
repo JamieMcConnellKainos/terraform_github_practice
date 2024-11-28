@@ -59,7 +59,7 @@ jobs:
         tf_actions_subcommand: 'plan'
         tf_actions_working_dir: './lab'
 
-    # Apply Terraform changes (manual trigger for safety)
+    # Apply Terraform changes - manual trigger for safety
     - name: Terraform Apply
       if: github.event_name == 'workflow_dispatch'
       uses: hashicorp/terraform-github-actions@master
