@@ -133,27 +133,6 @@ resource "azurerm_public_ip" "example" {
   sku                 = "Standard"
 }
 
-# Bastion Host
-resource "azurerm_bastion_host" "example" {
-  name                = "examplebastion"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  ip_configuration {
-    name                 = "configuration"
-    subnet_id            = azurerm_subnet.example.id
-    public_ip_address_id = azurerm_public_ip.example.id
-  }
-}
-
-# Bastion Subnet
-resource "azurerm_subnet" "example" {
-  name                 = "AzureBastionSubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.my_terraform_network_1.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
-
-
 # Subnet 1
 resource "azurerm_subnet" "my_terraform_subnet_1" {
   name                 = "subnet-1"
