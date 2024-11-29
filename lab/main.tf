@@ -5,7 +5,7 @@ terraform {
     storage_account_name = "terraformpracticejamie"
     container_name       = "tfstatedevops"
     key                  = "tfstatedevops.tfstate"
-  }e
+  }
 }
 
 # Resource Group
