@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 1.5.7"
+  backend "azurerm" {
+    resource_group_name  = "tamopstfstates"
+    storage_account_name = "terraformpracticejamie"
+    container_name       = "tfstatedevops"
+    key                  = "tfstatedevops.tfstate"
+  }e
+}
+
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   location = var.resource_group_location
